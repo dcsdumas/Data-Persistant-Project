@@ -26,6 +26,8 @@ public class MainManager : MonoBehaviour
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         ScoreText.text = $"Name: {MenuManager.Instance.playerData.playerName} Score : {m_Points}";
+        MenuManager.Instance.LoadHighScore();
+        SetBestScore();
         int[] pointCountArray = new [] {1,1,2,2,5,5};
         for (int i = 0; i < LineCount; ++i)
         {
@@ -73,5 +75,19 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        if (MenuManager.Instance.highscoreData.highScore < m_Points)
+        {
+            MenuManager.Instance.highscoreData.highScore = m_Points;
+            MenuManager.Instance.highscoreData.playerName = MenuManager.Instance.playerData.playerName;
+            SetBestScore();
+            MenuManager.Instance.SaveHighScore();
+        }
+    }
+    private void SetBestScore()
+    {
+        Debug.Log(BestScore.text);
+        Debug.Log(BestScore.ToString());
+        BestScore.text = $"Best Score: {MenuManager.Instance.highscoreData.playerName} : {MenuManager.Instance.highscoreData.highScore}";
+        Debug.Log("Setting Score");
     }
 }
